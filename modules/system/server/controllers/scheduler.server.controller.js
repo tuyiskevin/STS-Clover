@@ -72,14 +72,14 @@ var
         if(technician){
           User.findById({ $in:technician }).select('username').exec(function(err,user){
             if (err) return console.log(err);
-            mailer.send(user.username+'@emory.edu', 'Clover: Unclosed Walk-in Tickets', '',
+            else mailer.send(user.username+'@emory.edu', 'Clover: Unclosed Walk-in Tickets', '',
               'Important: You have a walk-in ticket(s) that needs to be closed. Please check clover.');
           });
         }
         //send email to admins
         System.find({}, { admin_email:1, _id:0 }).exec(function(err, admins){
           if(err) return console.log(err);
-          for (var i=0; i<admins.length; i++){
+          else for (var i=0; i<admins.length; i++){
             mailer.send(admins[i].admin_email, 'Clover: Unclosed Walk-in Tickets', '',
               'Important: There are ' + technician.length+ ' Open walk-in ticket(s) and '+queue.length+' unopened ticket(s) in the Queue. Please take action to close them.');
           }
