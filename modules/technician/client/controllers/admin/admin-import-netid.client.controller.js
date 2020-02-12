@@ -5,6 +5,7 @@ angular.module('technician.admin').controller('AdminImportNetIdController', ['$s
 
 
     var processTextFile = function(file){
+
       var reader = new FileReader();
       reader.onloadend = function(e){
         var entry, entries = [], lines = e.target.result.split('\n');
@@ -53,6 +54,7 @@ angular.module('technician.admin').controller('AdminImportNetIdController', ['$s
 
     $scope.$watch('file', function(file) {
       if(file) {
+        console.log('**** Watching *****');
         $scope.loading = true;
         $scope.importing = false;
         $scope.summary = {};

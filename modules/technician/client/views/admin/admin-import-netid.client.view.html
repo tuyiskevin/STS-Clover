@@ -18,7 +18,7 @@
       </span>
     </div>
     <div class="card-body">
-      <uib-progressbar ng-show="importing && !summary.error"
+      <uib-progressbar type="success" animate="true" style="border-radius: 20px;" ng-show="importing && !summary.error"
         max="summary.count" value="summary.importCount"><span style="color:white; white-space:nowrap;">
         {{summary.importCount}} / {{summary.count}}</span></uib-progressbar>
 

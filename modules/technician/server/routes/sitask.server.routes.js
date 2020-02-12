@@ -8,6 +8,8 @@ var users = require('../../../users/server/controllers/users.server.controller')
 
 module.exports = function (app) {
   app.route('/api/tech/sitask/create').post(users.hasTechnicianPermission, sitask.create);
+  
+
   app.route('/api/tech/sitask/list').get(users.hasTechnicianPermission, sitask.list);
   app.route('/api/tech/sitask/settings').get(users.hasTechnicianPermission, sitask.settings);
 

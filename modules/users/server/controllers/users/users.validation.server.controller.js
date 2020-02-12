@@ -94,6 +94,7 @@ exports.validate = function(req, res){
   if(username){
     exports.validateUsername(username, function(result){
       res.json(result);
+      
     });
   }
   else res.status(400).send('Invalid or unspecified username.');

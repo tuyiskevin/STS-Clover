@@ -61,29 +61,30 @@ var
     return schedule.scheduleJob('0 0 19 * * 1-5', function() {
       Walkin.find({ status : { $in : ['In queue', 'Work in progress'] }, isActive : true }).select('status lastUpdateTechnician').exec(function (err, walkins) {
         if(err) return console.log(err);
-        
-        for(var k=0; k<walkins.length; k++){
-          if(walkins[k].status === 'Work in progress')
-            technician.push(walkins[k].lastUpdateTechnician);
-          else 
-            queue.push(walkins[k].lastUpdateTechnician);
-        }
-        //send email to technicians
-        if(technician){
-          User.findById({ $in:technician }).select('username').exec(function(err,user){
-            if (err) return console.log(err);
-            else mailer.send(user.username+'@emory.edu', 'Clover: Unclosed Walk-in Tickets', '',
-              'Important: You have a walk-in ticket(s) that needs to be closed. Please check clover.');
+        if(walkins){
+          for(var k=0; k<walkins.length; k++){
+            if(walkins[k].status === 'Work in progress')
+              technician.push(walkins[k].lastUpdateTechnician);
+            else 
+              queue.push(walkins[k].lastUpdateTechnician);
+          }
+          // send email to technicians
+          if(technician){
+            User.findById({ $in:technician }).select('username').exec(function(err,user){
+              if (err) return console.log(err);
+              else mailer.send(user.username+'@emory.edu', 'Clover: Unclosed Walk-in Tickets', '',
+                'Important: You have a walk-in ticket(s) that needs to be closed. Please check clover.');
+            });
+          }
+          // send email to admins
+          System.find({}, { admin_email:1, _id:0 }).exec(function(err, admins){
+            if(err) return console.log(err);
+            else for (var i=0; i<admins.length; i++){
+              mailer.send(admins[i].admin_email, 'Clover: Unclosed Walk-in Tickets', '',
+                'Important: There are ' + technician.length+ ' Open walk-in ticket(s) and '+queue.length+' unopened ticket(s) in the Queue. Please take action to close them.');
+            }
           });
         }
-        //send email to admins
-        System.find({}, { admin_email:1, _id:0 }).exec(function(err, admins){
-          if(err) return console.log(err);
-          else for (var i=0; i<admins.length; i++){
-            mailer.send(admins[i].admin_email, 'Clover: Unclosed Walk-in Tickets', '',
-              'Important: There are ' + technician.length+ ' Open walk-in ticket(s) and '+queue.length+' unopened ticket(s) in the Queue. Please take action to close them.');
-          }
-        });
       });
         
     });

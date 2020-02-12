@@ -25,6 +25,7 @@ angular.module('technician').controller('TaskCenterController', ['$scope', '$sta
       });
     };
 
+
     $scope.listChores_dateQuery = function(date) {
       var date_start = new Date(date).getTime(), date_end = date_start + 1000*60*60*24;
       var query = { '$or' : [{ created: { '$gte': date_start, '$lte': date_end } },
@@ -85,7 +86,7 @@ angular.module('technician').controller('TaskCenterController', ['$scope', '$sta
 
         var query = { username : { '$regex' : netid, '$options': 'i' } };
         $http.post('/api/tech/sitask/query', query)
-          .success(function(sitasks) { $scope.sitasks = sitasks; })
+          .success(function(sitasks) { $scope.sitasks = sitasks; console.log(sitasks);})
           .error(function() { alert('Server error when fetching STS tasks.'); });
       }
       else if($scope.querying_sitask) {
@@ -195,9 +196,9 @@ angular.module('technician').controller('TaskCenterController', ['$scope', '$sta
                   var tID = $scope.sitasks.indexOf(SITasks[idx]);
                   if(tID != -1 && $scope.sitasks[tID]._id === SITasks[idx]._id){
                     $scope.sitasks.splice(tID, 1);
-      
                   }
                 }
+                $scope.selectedTask= undefined;
               }) 
             .error(function(){alert('Failed request. Check console for the error.');});
         }
