@@ -6,6 +6,7 @@ angular.module('system').controller('SITaskCreateModalController', ['$scope', '$
     $scope.user = Authentication.getUser();
     $scope.importedUsers= [];
     var templateC = {};
+    $scope.allUsers = [];
     var customTemplate = function(newT, oldT){
       newT.name = oldT.name;
       newT.taskDetails = oldT.task_details;
@@ -61,6 +62,7 @@ angular.module('system').controller('SITaskCreateModalController', ['$scope', '$
       $http.post('/api/modal/getUser', query).success(function(user){
         $scope.summary.importCount++;
         $scope.importedUsers.push(user);
+        $scope.allUsers.push(user.username);
         if(++index < entries.length) importAux(index, entries);
         else {$scope.success = 'Successfully imported ' + entries.length + ' user entries';
           $scope.importedUsers.push($scope.data.user);

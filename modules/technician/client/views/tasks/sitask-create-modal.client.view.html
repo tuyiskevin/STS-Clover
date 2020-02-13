@@ -6,8 +6,8 @@
         <h3 class="modal-title"><i class="fa fa-cogs"></i> Create Self-Initiated Task: </h3>
   </div>
   <div style="display: inline-block; max-height: 40px; width: 50%; overflow:scroll; vertical-align: bottom;">
-        <span style="font-size: 18px; " ng-hide="summary.count>0">{{data.user.username}}</span>
-        <span style="font-size: 18px;" ng-show="importedUsers.length==summary.count"> {{importedUsers.join(',')}}</span>
+        <span style="font-size: 18px; " ng-show="allUsers.length==0">{{data.user.username}}</span>
+        <span style="font-size: 18px;"> {{allUsers.join(',')}}</span>
       
   </div>
       
