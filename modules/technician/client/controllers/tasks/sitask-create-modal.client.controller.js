@@ -5,7 +5,15 @@ angular.module('system').controller('SITaskCreateModalController', ['$scope', '$
     $scope.data = data; $scope.data.sitask = {}; $scope.template = {}; $scope.data.chore = {};
     $scope.user = Authentication.getUser();
     $scope.importedUsers= [];
-    var tempTemplate ={};
+    var templateC = {};
+    var customTemplate = function(newT, oldT){
+      newT.name = oldT.name;
+      newT.taskDetails = oldT.task_details;
+      newT.techMessage = oldT.technician_message;
+      newT.customerMessage = oldT.customer_message;
+      newT.choreInstruction = oldT.chore_instruction;
+      
+    };
     
     $scope.init = function() {
       $http.get('/api/tech/sitask/settings')
@@ -18,6 +26,7 @@ angular.module('system').controller('SITaskCreateModalController', ['$scope', '$
     // Modal functions
     $scope.cancel = function() {
       $uibModalInstance.close(false);
+      console.log(templateC);
     };
     //importing users
     var processTextFile = function(file){
@@ -89,7 +98,6 @@ angular.module('system').controller('SITaskCreateModalController', ['$scope', '$
     };
 
     var replacePlaceHolder = function(template, user){
-      
       var name = user.displayName;
       var phone_numer = user.phone;
       phone_numer = phone_numer ? phone_numer.substring(0, 3) + '-' + phone_numer.substring(3, 6) + '-' + phone_numer.substring(6) : '{NO NUMBER ON RECORD}';
@@ -101,9 +109,9 @@ angular.module('system').controller('SITaskCreateModalController', ['$scope', '$
     };
 
     $scope.onTemplateChange = function() {
-      tempTemplate = $scope.template;
-      
+      customTemplate(templateC, $scope.template);
       replacePlaceHolder($scope.template, $scope.data.user);
+
       $scope.data.sitask.description = $scope.template.task_details;
       $scope.data.sitask.msg_DisplayCustomer = $scope.template.customer_message;
       $scope.data.sitask.msg_DisplayTechnician = $scope.template.technician_message;
@@ -118,11 +126,11 @@ angular.module('system').controller('SITaskCreateModalController', ['$scope', '$
 
       console.log(name+'\n'+phone_numer+'\n'+sitask.username);
       console.log(template);
-      sitask.description = template.task_details.replace('{PHONE}', phone_numer).replace('{NAME}', name);
-      sitask.msg_DisplayCustomer = template.customer_message.replace('{PHONE}', phone_numer).replace('{NAME}', name);
-      sitask.msg_DisplayTechnician = template.technician_message.replace('{PHONE}', phone_numer).replace('{NAME}', name);
+      sitask.description = template.taskDetails.replace('{PHONE}', phone_numer).replace('{NAME}', name);
+      sitask.msg_DisplayCustomer = template.customerMessage.replace('{PHONE}', phone_numer).replace('{NAME}', name);
+      sitask.msg_DisplayTechnician = template.techMessage.replace('{PHONE}', phone_numer).replace('{NAME}', name);
 
-      if (chore) chore.instruction = template.chore_instruction.replace('{PHONE}', phone_numer).replace('{NAME}', name);
+      if (chore) chore.instruction = template.choreInstruction.replace('{PHONE}', phone_numer).replace('{NAME}', name);
     };
     
 
@@ -159,9 +167,9 @@ angular.module('system').controller('SITaskCreateModalController', ['$scope', '$
 
     var createMultAuax = function(idx,users) {
       var chore = $scope.data.chore;
-      var sitask =$scope.data.sitask;
+      var SITask =$scope.data.sitask;
       var user = users[idx];
-      multiplePlaceHolders(sitask,chore,user,tempTemplate);
+      multiplePlaceHolders(SITask,chore,user,templateC);
 
       if($scope.createChore && chore) {
         if (!chore.instruction)$scope.error = 'Please enter the instruction for the chore.';
@@ -169,15 +177,20 @@ angular.module('system').controller('SITaskCreateModalController', ['$scope', '$
           $http.post('/api/tech/chore/create', chore)
             .error(function () { $scope.error = 'Server error while creating chore'; })
             .success(function(chore) {
-              sitask.chores = [chore._id];
+              SITask.chores = [chore._id];
+              $http.post('/api/tech/sitask/create',SITask)
+                .success(function(){
+                  if(++idx<users.length) createMultAuax(idx,users);
+                  else $uibModalInstance.close(true);
+                }).error(function(){ alert('Sever Error while creating SITask.'); });
             });
         }
       }
-      $http.post('/api/tech/sitask/create',sitask)
+      else {$http.post('/api/tech/sitask/create',SITask)
         .success(function(){
           if(++idx<users.length) createMultAuax(idx,users);
           else $uibModalInstance.close(true);
-        }).error(function(){ alert('Sever Error while creating SITask.'); });
+        }).error(function(){ alert('Sever Error while creating SITask.'); });}
     };
     
 

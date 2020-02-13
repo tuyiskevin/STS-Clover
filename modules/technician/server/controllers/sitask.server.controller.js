@@ -28,7 +28,6 @@ exports.create = function(req, res) {
 
   var sitask = new SITask(req.body), user = req.user;
   sitask.createdBy = user;
-  console.log(sitask);
   sitask.save(function (err, sitask) {
     if(err) { console.error(err); res.sendStatus(500); }
     else res.json(sitask);
