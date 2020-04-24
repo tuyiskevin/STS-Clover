@@ -29,7 +29,6 @@ Since the repository is public, everyone on web can view the contents pushed to 
 ## Architecture
 ### Model View Controller
 This project follows a MVC design. Understanding this design pattern will help in finding the files containing the logic you might be interested in updating.
-#### image
 Model in this project is identified by “.model.js”, these files use a Object Oriented layout to define each of the database templates. 
 
 Views are identified by “view.html” defines the layout of a page on front-end.  They usually appears in pairs with client controllers (abc.client.controller.js usually details the logic in abc.client.view.html).  
