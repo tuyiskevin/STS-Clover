@@ -22,10 +22,10 @@
 ## Description
 ## Basics
 #### Code Repository
-The code for STS Clover is at https://github.com/STS-Emory/STS-Clover. It is managed by the github account: stsemorystaff@gmail.com and the usual STS password. It is used as a public repository so pulling (downloading) from it does not require a password / account. Pushing (uploading) to the repository will require Github Login. The initial development of this project is done by Henry Chen (github: henryYHC). The following maintenance development and this documentation is done by Shen Gao (github: ShenGao)
+The code for the official STS Clover is at https://github.com/STS-Emory/STS-Clover. It is managed by the github accounts: STS-Emory  and tuyiskevin. This is a public repository which means that some configurations files are not available to the public for security purposes but would have be to created when you decide to run the instance. 
 
 ### Code Security
-Since the repository is public, everyone on web can view the contents pushed to repo. It is important not to push things like credentials (for email server or database) up to the github, this repo has already have a gitignore file set up to filter these files when uploading. One safe procedure is to only add additional credentials in the files in gitignore, please do not hardcode them in the controllers.
+Since the repository is public, everyone on web can view the contents pushed to repo. Once you run your instance, It is important not to push things like credentials (for email server or database) up to the github, this repo has already have a gitignore file set up to filter these files when uploading. One safe procedure is to only add additional credentials in the files in gitignore.
 ## Architecture
 ### Model View Controller
 This project follows a MVC design. Understanding this design pattern will help in finding the files containing the logic you might be interested in updating.
