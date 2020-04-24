@@ -38,7 +38,7 @@ There are generally two types of controllers in this project: client (front-end 
 The prior (identified by “client.controller.js”) is js code that is going to be executed on the user’s machine so when writing them keep in mind they should be lightweight (for user experience improvement). The security measures taken in these files is only auxiliary and cannot guarantee full security (meaning whatever security logic you have here need to be implemented by some counterpart in backend too).
 
 The later (identified by “server.controller.js”) is js code that is going to executed on backend (server). These functions are usually mapped to an interface by “.routes.js” files. These are the backend logic needed to be done, all of the database options happens here too. The workflow of the whole application can be expressed as:
-##### image
+
 ### Set up instructions
 Use git clone to download the code from github
 ```
